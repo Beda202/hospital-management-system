@@ -1,54 +1,40 @@
 package com.hospital.hms.entity;
 
-import com.hospital.hms.Enum.UserRole;
-import com.hospital.hms.Enum.UserStatus;
+import com.hospital.hms.Enum.BedStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
+
 @Entity
-@Table(name = "users")
+@Table(name = "beds")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User {
-
+public class Bed {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String username;
-
-    @Column(nullable = false, unique = true)
-    private String nationalId;
+    @Column(nullable = false)
+    private String bedNumber;
 
     @Column(nullable = false)
-    private String password;
-
-    @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    @Column(nullable = false)
-    private String phone;
+    private String wardName;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private UserRole role;
+    private BedStatus status = BedStatus.AVAILABLE;
 
-    private String department;
-    private String specialty;
-    private String avatar;
+    @OneToOne
+    @JoinColumn(name = "patient_id")
+    private Patient patient;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private UserStatus status = UserStatus.ACTIVE;
+    private String patientName;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -59,8 +45,4 @@ public class User {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
-
-
-
-
 }
