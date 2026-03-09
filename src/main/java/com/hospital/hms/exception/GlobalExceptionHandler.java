@@ -43,6 +43,19 @@ public class GlobalExceptionHandler {
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST , ex.getMessage()) ;
     }
 
+    @ExceptionHandler(AppointmentNotFoundException.class)
+    public ProblemDetail handleAppointmentNotFoundException(AppointmentNotFoundException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND , ex.getMessage()) ;
+    }
+    @ExceptionHandler(BedNotFoundException.class)
+    public ProblemDetail handleBedNotFoundException(BedNotFoundException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND , ex.getMessage()) ;
+    }
+    @ExceptionHandler(BedNumberAlreadyExist.class)
+    public ProblemDetail handleBedNumberAlreadyExist(BedNumberAlreadyExist ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST , ex.getMessage()) ;
+    }
+
 
 
 
