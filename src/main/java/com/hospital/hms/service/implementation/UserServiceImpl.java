@@ -13,8 +13,13 @@ import com.hospital.hms.exception.UserNotFoundException;
 import com.hospital.hms.mapper.UserMapper;
 import com.hospital.hms.repository.UserRepository;
 import com.hospital.hms.service.UserService;
+import com.hospital.hms.utils.JwtUtil;
 import lombok.AllArgsConstructor;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,21 +30,31 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository ;
     private final PasswordEncoder passwordEncoder ;
+    private final JwtUtil jwtUtil;
+    private final AuthenticationManager authenticationManager;
 
     @Override
     public LoginResponse login(LoginRequest request) throws Exception {
+        String userName = request.getUsername();
         User user = userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new UserNotFoundException("User Not Found !"));
+         String password= request.getPassword();
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new InvalidPasswordException("Invalid password") ;
         }
+        UsernamePasswordAuthenticationToken tok = new UsernamePasswordAuthenticationToken(userName, password);
+        Authentication authentication = authenticationManager.authenticate(tok);
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String accessToken = jwtUtil.generateAccessToken(userDetails);
+        String RefreshToken = jwtUtil.generateRefreshToken(userDetails);
+
 
 
         return LoginResponse.builder()
-                .AccessToken("mock-jwt-token-" )
-                .refreshToken("mock-refresh-token-")
+                .AccessToken(accessToken)
+                .refreshToken(RefreshToken)
                 .type("Bearer")
-                .user(UserMapper.mapToUserDto(user))
-                .build();
+                  .user(UserMapper.mapToUserDto(user))
+                  .build();
     }
 
     @Override

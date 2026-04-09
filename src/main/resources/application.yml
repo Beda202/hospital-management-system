@@ -2,6 +2,21 @@ spring:
   application:
     name: hms-backend
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: salemsheer4321@gmail.com
+    password: vtxp miic innx mmjx
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+
+
   datasource:
     url: jdbc:mysql://localhost:3306/hms_db
     username: root
@@ -14,6 +29,11 @@ spring:
     show-sql: true
     format_sql: true
 
+  app:
+    jwtSecret: V8n2fWZ8Q9L5kE7Q4pY7y9o7Z1m2J8q0x3r4t5y6u7i=
+    jwtRefreshExpirationMs: 300000000
+    jwtExpirationMs: 86400000
+
 server:
   port: 9090
 
@@ -21,3 +41,4 @@ logging:
   level:
     root: INFO
     com.hms: DEBUG
+
