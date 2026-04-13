@@ -21,4 +21,4 @@ public interface AppointmentService {
     public List<AppointmentDTO> getAppointmentsByDepartment(String department);
 
 
-    }
+}

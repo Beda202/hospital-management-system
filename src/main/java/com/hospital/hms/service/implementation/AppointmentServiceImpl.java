@@ -4,6 +4,7 @@ import com.hospital.hms.Enum.AppointmentStatus;
 import com.hospital.hms.Enum.AppointmentType;
 import com.hospital.hms.dto.AppointmentDTO;
 import com.hospital.hms.entity.Appointment;
+import com.hospital.hms.entity.Doctor;
 import com.hospital.hms.entity.Patient;
 import com.hospital.hms.entity.User;
 import com.hospital.hms.exception.AppointmentNotFoundException;
@@ -11,8 +12,8 @@ import com.hospital.hms.exception.PatientNotFoundException;
 import com.hospital.hms.exception.UserNotFoundException;
 import com.hospital.hms.mapper.AppointmentMapper;
 import com.hospital.hms.repository.AppointmentRepository;
+import com.hospital.hms.repository.DoctorRepository;
 import com.hospital.hms.repository.PatientRepository;
-import com.hospital.hms.repository.UserRepository;
 import com.hospital.hms.service.AppointmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,14 +25,14 @@ import java.util.List;
 public class AppointmentServiceImpl implements AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final PatientRepository patientRepository;
-    private final UserRepository userRepository;
+    private final DoctorRepository doctorRepository;
 
     @Override
     public List<AppointmentDTO> getAllAppointments() {
-            return    appointmentRepository.findAll()
-                        .stream()
-                        .map(AppointmentMapper::mapToAppointmentDTO)
-                        .toList()
+        return    appointmentRepository.findAll()
+                .stream()
+                .map(AppointmentMapper::mapToAppointmentDTO)
+                .toList()
                 ;
     }
 
@@ -44,17 +45,17 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public List<AppointmentDTO> getAppointmentsByPatient(Long patientId) {
         Patient patient = patientRepository.findById(patientId).orElseThrow(() -> new PatientNotFoundException("Patient not found"));
-          return  appointmentRepository.findByPatient(patient)
-                  .stream()
-                  .map(AppointmentMapper::mapToAppointmentDTO)
-                  .toList();
+        return  appointmentRepository.findByPatient(patient)
+                .stream()
+                .map(AppointmentMapper::mapToAppointmentDTO)
+                .toList();
 
     }
 
     @Override
     public List<AppointmentDTO> getAppointmentsByDoctor(Long doctorId) {
-        User doctor = userRepository.findById(doctorId).orElseThrow(() -> new UserNotFoundException("Doctor not found"));
-       return appointmentRepository.findByDoctor(doctor)
+        Doctor doctor = doctorRepository.findById(doctorId).orElseThrow(() -> new UserNotFoundException("Doctor not found"));
+        return appointmentRepository.findByDoctor(doctor)
                 .stream()
                 .map(AppointmentMapper::mapToAppointmentDTO)
                 .toList();
@@ -66,7 +67,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         Patient patient = patientRepository.findById(appointmentDTO.getPatientId())
                 .orElseThrow(() -> new PatientNotFoundException("Patient not found"));
 
-        User doctor = userRepository.findById(appointmentDTO.getDoctorId())
+        Doctor doctor = doctorRepository.findById(appointmentDTO.getDoctorId())
                 .orElseThrow(() -> new UserNotFoundException("Doctor not found"));
 
         Appointment appointment = new Appointment();
@@ -136,30 +137,30 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public List<AppointmentDTO> getAppointmentsByStatus(String status) {
         AppointmentStatus appointmentStatus = AppointmentStatus.valueOf(status.toUpperCase());
-       return appointmentRepository.findByStatus(appointmentStatus)
-               .stream()
-               .map(AppointmentMapper::mapToAppointmentDTO)
-               .toList()
-               ;
+        return appointmentRepository.findByStatus(appointmentStatus)
+                .stream()
+                .map(AppointmentMapper::mapToAppointmentDTO)
+                .toList()
+                ;
 
     }
 
     @Override
     public List<AppointmentDTO> getAppointmentsByDate(LocalDate date) {
-      return   appointmentRepository.findByAppointmentDate(date)
-              .stream()
-              .map(AppointmentMapper::mapToAppointmentDTO)
-              .toList()
-              ;
+        return   appointmentRepository.findByAppointmentDate(date)
+                .stream()
+                .map(AppointmentMapper::mapToAppointmentDTO)
+                .toList()
+                ;
 
     }
 
     @Override
     public List<AppointmentDTO> getAppointmentsByDepartment(String department) {
-      return  appointmentRepository.findByDepartment(department)
-              .stream()
-              .map(AppointmentMapper::mapToAppointmentDTO)
-              .toList();
+        return  appointmentRepository.findByDepartment(department)
+                .stream()
+                .map(AppointmentMapper::mapToAppointmentDTO)
+                .toList();
 
     }
 

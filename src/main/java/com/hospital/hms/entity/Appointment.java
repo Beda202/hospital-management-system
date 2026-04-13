@@ -32,7 +32,7 @@ public class Appointment {
 
     @ManyToOne
     @JoinColumn(name = "doctor_id", nullable = false)
-    private User doctor;
+    private Doctor doctor;
 
     @Column(nullable = false)
     private String doctorName;

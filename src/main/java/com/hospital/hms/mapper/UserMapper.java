@@ -13,10 +13,11 @@ public class UserMapper {
                 .email(user.getEmail())
                 .phone(user.getPhone())
                 .role(user.getRole().toString())
-                .department(user.getDepartment())
-                .specialty(user.getSpecialty())
+                .nationalId(user.getNationalId())
+                .password(user.getPassword())
+                .address(user.getAddress())
                 .avatar(user.getAvatar())
-                .status(user.getStatus().toString())
+                .status(user.getUserStatus().toString())
                 .build();
     }
 }

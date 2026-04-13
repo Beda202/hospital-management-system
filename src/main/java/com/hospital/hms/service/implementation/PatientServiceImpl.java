@@ -2,6 +2,8 @@ package com.hospital.hms.service.implementation;
 
 import com.hospital.hms.Enum.Gender;
 import com.hospital.hms.Enum.PatientStatus;
+import com.hospital.hms.Enum.UserRole;
+import com.hospital.hms.Enum.UserStatus;
 import com.hospital.hms.dto.PatientDTO;
 import com.hospital.hms.entity.Patient;
 import com.hospital.hms.exception.EmailAlreadyExistException;
@@ -55,15 +57,19 @@ public class PatientServiceImpl implements PatientService {
         patient.setDateOfBirth(patientDTO.getDateOfBirth());
         patient.setGender(Gender.valueOf(patientDTO.getGender().toUpperCase()));
         patient.setBloodType(patientDTO.getBloodType());
+        patient.setRole(UserRole.PATIENT);
+        patient.setUserStatus(UserStatus.ACTIVE);
+        patient.setUsername(patientDTO.getUsername());
         patient.setPhone(patientDTO.getPhone());
         patient.setEmail(patientDTO.getEmail());
+        patient.setPassword(patientDTO.getPassword());
         patient.setAddress(patientDTO.getAddress());
         patient.setEmergencyContact(patientDTO.getEmergencyContact());
         patient.setInsuranceProvider(patientDTO.getInsuranceProvider());
         patient.setInsuranceNumber(patientDTO.getInsuranceNumber());
         patient.setAllergies(patientDTO.getAllergies());
         patient.setMedicalHistory(patientDTO.getMedicalHistory());
-        patient.setStatus(PatientStatus.ACTIVE);
+        patient.setPatientStatus(PatientStatus.ACTIVE);
 
         Patient saved = patientRepository.save(patient);
 
@@ -124,7 +130,7 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public List<PatientDTO> getPatientsByStatus(String status) {
        PatientStatus patientStatus = PatientStatus.valueOf(status.toUpperCase());
-        return patientRepository.findByStatus(patientStatus)
+        return patientRepository.findByPatientStatus(patientStatus)
                 .stream()
                 .map(PatientMapper::mapToPatientDto)
                 .toList();

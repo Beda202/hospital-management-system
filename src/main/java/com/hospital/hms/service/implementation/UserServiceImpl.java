@@ -89,14 +89,9 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userDTO.getEmail());
         user.setName(userDTO.getName());
         user.setPhone(userDTO.getPhone());
-
         user.setPassword(passwordEncoder.encode("beda123"));
-
-
         user.setRole(UserRole.valueOf(userDTO.getRole().toUpperCase()));
-        user.setDepartment(userDTO.getDepartment());
-        user.setSpecialty(userDTO.getSpecialty());
-        user.setStatus(UserStatus.ACTIVE);
+        user.setUserStatus(UserStatus.ACTIVE);
 
         User savedUser = userRepository.save(user);
        UserDto userDto =UserMapper.mapToUserDto(savedUser);
@@ -111,8 +106,6 @@ public class UserServiceImpl implements UserService {
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
         user.setPhone(userDTO.getPhone());
-        user.setDepartment(userDTO.getDepartment());
-        user.setSpecialty(userDTO.getSpecialty());
         user.setAvatar(userDTO.getAvatar());
 
         User updatedUser = userRepository.save(user);
